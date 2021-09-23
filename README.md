@@ -9,18 +9,18 @@
 
 # Dependecies
 
-Postgresql
-php: 8
-composer
-laravel: 8
+-   Postgresql
+-   php: 8
+-   composer
+-   laravel: 8
 
 # Getting started
 
-...
+<code>
 composer install
 php artisan migrate
 php artisan serve
-...
+</code>
 
 -   [Simple, fast routing engine](https://laravel.com/docs/routing).
 -   [Powerful dependency injection container](https://laravel.com/docs/container).
