@@ -17,9 +17,13 @@
 # Getting started
 
 <code>
-   <p>composer install</p>
-    <p>php artisan migrate</p>
-    <p>php artisan serve</p>
+<br/>
+-   composer install
+<br/>
+-   php artisan migrate
+<br/>
+-   php artisan serve
+<br/>
 </code>
 
 ## Learning Laravel
