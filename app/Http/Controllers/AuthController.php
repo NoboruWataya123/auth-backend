@@ -16,7 +16,7 @@ class AuthController extends Controller
         $this->validate($request, [
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:6',
         ]);
 
         return User::create([
@@ -45,11 +45,18 @@ class AuthController extends Controller
 
         $token = $user->createToken('token')->plainTextToken;
 
-        $cookie = cookie('jwt', $token, 60 * 24); // 1 day
+        $cookie = cookie('jwt', $token, 60 * 168); // 1 day
+
+        if (Cookie::get('jwt')) {
+            return response()->json([
+                'message' => 'Already logged in'
+            ], Response::HTTP_BAD_REQUEST);
+        }
 
         return response([
             'message' => $token
         ])->withCookie($cookie);
+
     }
 
     public function user()
@@ -69,5 +76,11 @@ class AuthController extends Controller
         return response([
             'message' => 'Successfully logged out'
         ])->withCookie($cookie);
+
+        if (!Auth::user()) {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], Response::HTTP_UNAUTHORIZED);
+        }
     }
 }
