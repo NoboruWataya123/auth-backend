@@ -19,6 +19,13 @@ class AuthController extends Controller
             'password' => 'required|string|min:6',
         ]);
 
+        if (Cookie::get('jwt')) {
+            redirect('/login');
+            return response()->json([
+                'message' => 'You are already logged in.'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         return User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
@@ -45,7 +52,7 @@ class AuthController extends Controller
 
         $token = $user->createToken('token')->plainTextToken;
 
-        $cookie = cookie('jwt', $token, 60 * 168); // 1 day
+        $cookie = cookie('jwt', $token, 60 * 168);
 
         if (Cookie::get('jwt')) {
             return response()->json([

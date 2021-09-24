@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use GuzzleHttp\Middleware;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,13 +15,25 @@ use App\Http\Controllers\AuthController;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
+
+Route::post('register' , function(){
+    if(Auth::user()){
+        return response()->json(['message' => 'You are already logged in'], 401);
+    } else {
+            Route::post('register', [\App\Http\Controllers\AuthController::class, 'register']);
+        }
+    });
 */
 
-    Route::post('/register', function () {
-        [\App\Http\Controllers\AuthController::class, 'register'];
-    })->middleware('auth:api');
+    
+    
     Route::post('login', [\App\Http\Controllers\AuthController::class, 'login']);
-
+    if (!Auth::check()) {
+    Route::post('register', [\App\Http\Controllers\AuthController::class, 'register']);
+    } else {
+        return response()->json(['message' => 'You are already logged in'], 401);
+    }
+    
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('user', [\App\Http\Controllers\AuthController::class, 'user']);
